@@ -11,5 +11,6 @@ namespace Core.Entity.Concrete
         public byte[] PasswordSalt { get; set; } = Array.Empty<byte>();
         public byte[] PasswordHash { get; set; } = Array.Empty<byte>();
         public bool Status { get; set; }
+        public ICollection<UserOperationClaim> UserOperationClaims { get; set; } = new List<UserOperationClaim>();
     }
 }

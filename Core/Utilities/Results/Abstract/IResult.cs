@@ -6,6 +6,6 @@ namespace Core.Utilities.Results.Abstract
     {
         public ResultStatus ResultStatus { get; }
         public string Message { get; }
-        public Exception Exception { get; }
+        public Exception? Exception { get; }
     }
 }

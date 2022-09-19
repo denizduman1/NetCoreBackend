@@ -14,6 +14,7 @@ namespace Core.Business.Concrete
     {
         private readonly IUnitOfWorkBase _unitOfWorkBase;
         private readonly IMapper _mapper;
+        private Messages messages = Messages.Instance();
 
         public OperationClaimManager(IUnitOfWorkBase unitOfWorkBase, IMapper mapper)
         {
@@ -26,7 +27,7 @@ namespace Core.Business.Concrete
             var operationClaim = _mapper.Map<OperationClaim>(operationClaimAddDto);
             await _unitOfWorkBase.OperationClaimRepository.AddAsync(operationClaim);
             await _unitOfWorkBase.SaveAsync();
-            return new Result(ResultStatus.Success, Messages.SuccessAddData);
+            return new Result(ResultStatus.Success, messages.SuccessAddData);
         }
 
         public async Task<IResult> DeleteAsync(int id)
@@ -36,9 +37,9 @@ namespace Core.Business.Concrete
             {
                 await _unitOfWorkBase.OperationClaimRepository.RemoveAsync(operationClaim);
                 await _unitOfWorkBase.SaveAsync();
-                return new Result(ResultStatus.Success, Messages.SuccessRemoveData);
+                return new Result(ResultStatus.Success, messages.SuccessRemoveData);
             }
-            return new Result(ResultStatus.Error, Messages.SuccessRemoveData);
+            return new Result(ResultStatus.Error, messages.SuccessRemoveData);
         }
 
         public async Task<IDataResult<OperationClaimListDto>> GetAllAsync()
@@ -58,9 +59,9 @@ namespace Core.Business.Concrete
                 return new DataResult<OperationClaimListDto>(new OperationClaimListDto
                 {
                     OperationClaimDtos = operationClaimDtos
-                }, ResultStatus.Success, Messages.SuccessGetAllData);
+                }, ResultStatus.Success, messages.SuccessGetAllData);
             }
-            return new DataResult<OperationClaimListDto>(new OperationClaimListDto { }, ResultStatus.Error, Messages.ErrorData);
+            return new DataResult<OperationClaimListDto>(new OperationClaimListDto { }, ResultStatus.Error, messages.ErrorData);
         }
 
         public async Task<IDataResult<OperationClaimDto>> GetByIdAsync(int id)
@@ -69,9 +70,9 @@ namespace Core.Business.Concrete
             if (operationClaim != null)
             {
                 var operationClaimDto = _mapper.Map<OperationClaimDto>(operationClaim);
-                return new DataResult<OperationClaimDto>(operationClaimDto, ResultStatus.Success ,Messages.SuccessData);
+                return new DataResult<OperationClaimDto>(operationClaimDto, ResultStatus.Success , messages.SuccessData);
             }
-            return new DataResult<OperationClaimDto>(new OperationClaimDto { }, ResultStatus.Error, Messages.ErrorData );
+            return new DataResult<OperationClaimDto>(new OperationClaimDto { }, ResultStatus.Error, messages.ErrorData );
         }
 
         public async Task<IResult> UpdateAsync(OperationClaimUpdateDto operationClaimUpdateDto)
@@ -82,9 +83,9 @@ namespace Core.Business.Concrete
                 var operationClaim = _mapper.Map<OperationClaim>(operationClaimUpdateDto); 
                 await _unitOfWorkBase.OperationClaimRepository.UpdateAsync(operationClaim);
                 await _unitOfWorkBase.SaveAsync();
-                return new Result(ResultStatus.Success, Messages.SuccessUpdateData);
+                return new Result(ResultStatus.Success, messages.SuccessUpdateData);
             }
-            return new Result(ResultStatus.Error, Messages.ErrorUpdateData);
+            return new Result(ResultStatus.Error, messages.ErrorUpdateData);
         }
     }
 }

@@ -43,13 +43,13 @@ namespace Core.Business.Concrete
 
         public async Task<IDataResult<OperationClaimListDto>> GetAllAsync()
         {
-            var operationClaim = await _unitOfWorkBase.OperationClaimRepository.GetAllAsync();
+            var operationClaimList = await _unitOfWorkBase.OperationClaimRepository.GetAllAsync();
 
-            if (operationClaim.Count > 0)
+            if (operationClaimList.Count > 0)
             {
                 var operationClaimDtos = new List<OperationClaimDto>();
                 
-                foreach (var opc in operationClaim)
+                foreach (var opc in operationClaimList)
                 {
                     var operationClaimDto = _mapper.Map<OperationClaimDto>(opc);
                     operationClaimDtos.Add(operationClaimDto);

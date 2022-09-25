@@ -16,5 +16,10 @@
 ✅ Autofac.Extras.DynamicProxy <br>
 ✅ AutoMapper <br>
 ✅ FluentValidation <br>
+✅ Microsoft.AspNetCore.Http.Abstractions <br>
 ✅ Microsoft.EntityFrameworkCore <br>
 ✅ Microsoft.EntityFrameworkCore.Relational <br>
+✅ Microsoft.Extensions.Configuration <br>
+✅ Microsoft.Extensions.Configuration.Binder <br>
+✅ Microsoft.IdentityModel.Tokens <br>
+✅ Microsoft.IdentityModel.Tokens.Jwt <br>

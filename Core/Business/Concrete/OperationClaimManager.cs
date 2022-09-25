@@ -70,7 +70,7 @@ namespace Core.Business.Concrete
             if (operationClaim != null)
             {
                 var operationClaimDto = _mapper.Map<OperationClaimDto>(operationClaim);
-                return new DataResult<OperationClaimDto>(operationClaimDto, ResultStatus.Success , messages.SuccessData);
+                return new DataResult<OperationClaimDto>(operationClaimDto, ResultStatus.Success , messages.SuccessGetData);
             }
             return new DataResult<OperationClaimDto>(new OperationClaimDto { }, ResultStatus.Error, messages.ErrorData );
         }

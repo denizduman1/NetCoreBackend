@@ -6,6 +6,7 @@ using Core.Entity.Concrete.DTOs;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.ComplexTypes;
 using Core.Utilities.Results.Concrete;
+using Core.Utilities.Results.Message;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Core.Business.Concrete
     {
         private readonly IUnitOfWorkBase _unitOfWorkBase;
         private readonly IMapper _mapper;
+        private Messages messages = Messages.Instance();
 
         public UserManager(IUnitOfWorkBase unitOfWorkBase ,IMapper mapper)
         {
@@ -26,9 +28,25 @@ namespace Core.Business.Concrete
             _mapper = mapper;
         }
 
+        public async Task<IResult> AddAsync(User user)
+        {
+            await _unitOfWorkBase.UserRepository.AddAsync(user);
+            await _unitOfWorkBase.SaveAsync();
+            return new Result(ResultStatus.Success,messages.SuccessAddData);
+        }
+
+        public async Task<IDataResult<User>> GetByMailAsync(string mail)
+        {
+            var user = await _unitOfWorkBase.UserRepository.GetAsync(u => u.Email == mail);
+            if(user != null)
+                return new DataResult<User>(user, ResultStatus.Success);
+
+            return new DataResult<User>(new User { }, ResultStatus.Error, messages.ErrorUserEmailNotFound);
+        }
+
         public async Task<IDataResult<OperationClaimListDto>> GetClaimsByUserIdAsync(int userId)
         {
-            User? user = await _unitOfWorkBase.UserRepository.GetAsync(u => u.ID == userId, u => u.UserOperationClaims, u => u.UserOperationClaims);
+            User? user = await _unitOfWorkBase.UserRepository.GetAsync(u => u.ID == userId, u => u.UserOperationClaims);
             OperationClaimListDto operationClaimListDto = new OperationClaimListDto();
             if (user != null && user.UserOperationClaims.Count > 0)
             {
@@ -46,9 +64,9 @@ namespace Core.Business.Concrete
                 {
                     return new DataResult<OperationClaimListDto>(operationClaimListDto, ResultStatus.Success);
                 }
-                return new DataResult<OperationClaimListDto>(operationClaimListDto, ResultStatus.Error, "Kullanıcı var fakat yetkisi yok.");
+                return new DataResult<OperationClaimListDto>(operationClaimListDto, ResultStatus.Error, messages.ErrorUserClaim);
             }
-            return new DataResult<OperationClaimListDto>(operationClaimListDto, ResultStatus.Error, "Kullanıcı veya yetkisi bulunamadı.");
+            return new DataResult<OperationClaimListDto>(operationClaimListDto, ResultStatus.Error, messages.ErrorUserOrUserClaim);
         }
     }
 }

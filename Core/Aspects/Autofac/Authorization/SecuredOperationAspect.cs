@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace Core.Aspects.Autofac.Authorization
 {
-    public class SecuredOperation : MethodIntercepiton
+    public class SecuredOperationAspect : MethodIntercepiton
     {
         private readonly string[] _roles;
         private readonly IHttpContextAccessor? _httpContextAccessor;
         private readonly Messages messages = Messages.Instance();
 
-        public SecuredOperation(string roles)
+        public SecuredOperationAspect(string roles)
         {
             _roles = roles.Split(',');
             if(ServiceTool.ServiceProvider != null)

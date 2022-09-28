@@ -11,7 +11,7 @@ namespace Core.DataAccess.Concrete.EntityFramework
         private readonly IUserOperationClaimRepository _userOperationClaimRepository;
         private readonly IOperationClaimRepository _operationClaimRepository;
 
-        protected EfUnitOfWorkBase(DbContext context)
+        public EfUnitOfWorkBase(DbContext context)
         {
             _context = context;
             _userRepository = new EfUserRepository(_context);

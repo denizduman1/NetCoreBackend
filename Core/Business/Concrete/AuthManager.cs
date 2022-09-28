@@ -50,7 +50,7 @@ namespace Core.Business.Concrete
             return new DataResult<User>(userToCheck.Data, ResultStatus.Success, messages.SuccessLogin);
         }
 
-        public async Task<IResult> RegisterUser(UserAddDto userAddDto)
+        public async Task<IDataResult<User>> RegisterUser(UserAddDto userAddDto)
         {
             HashingHelper.CreatePasswordHash(userAddDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -59,7 +59,7 @@ namespace Core.Business.Concrete
             user.PasswordSalt = passwordSalt;
 
             await _userService.AddAsync(user);
-            return new Result(ResultStatus.Success, messages.SuccessRegister);
+            return new DataResult<User>(user, ResultStatus.Success, messages.SuccessRegister);
         }
 
         public async Task<IResult> UserExist(string email)

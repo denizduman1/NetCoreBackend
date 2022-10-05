@@ -18,41 +18,42 @@ namespace Core.Business.Concrete
     //AutoMapper 11.0.1
     public class UserManager : IUserService
     {
-        private readonly IUnitOfWorkBase _unitOfWorkBase;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserOperationClaimRepository _userOperationClaimRepository;
         private readonly IMapper _mapper;
         private Messages messages = Messages.Instance();
 
-        public UserManager(IUnitOfWorkBase unitOfWorkBase ,IMapper mapper)
+        public UserManager(IUserRepository userRepository, IMapper mapper, IUserOperationClaimRepository userOperationClaimRepository)
         {
-            _unitOfWorkBase = unitOfWorkBase;
+            _userRepository = userRepository;
             _mapper = mapper;
+            _userOperationClaimRepository = userOperationClaimRepository;
         }
 
-        public async Task<IResult> AddAsync(User user)
+        public IResult Add(User user)
         {
-            await _unitOfWorkBase.UserRepository.AddAsync(user);
-            await _unitOfWorkBase.SaveAsync();
+            _userRepository.Add(user);
             return new Result(ResultStatus.Success,messages.SuccessAddData);
         }
 
-        public async Task<IDataResult<User>> GetByMailAsync(string mail)
+        public IDataResult<User> GetByMail(string mail)
         {
-            var user = await _unitOfWorkBase.UserRepository.GetAsync(u => u.Email == mail);
+            var user = _userRepository.Get(u => u.Email == mail);
             if(user != null)
                 return new DataResult<User>(user, ResultStatus.Success);
 
             return new DataResult<User>(new User { }, ResultStatus.Error, messages.ErrorUserEmailNotFound);
         }
 
-        public async Task<IDataResult<OperationClaimListDto>> GetClaimsByUserIdAsync(int userId)
+        public IDataResult<OperationClaimListDto> GetClaimsByUserId(int userId)
         {
-            User? user = await _unitOfWorkBase.UserRepository.GetAsync(u => u.ID == userId, u => u.UserOperationClaims);
+            User? user =  _userRepository.Get(u => u.ID == userId, u => u.UserOperationClaims);
             OperationClaimListDto operationClaimListDto = new OperationClaimListDto();
             if (user != null && user.UserOperationClaims.Count > 0)
             {
                 foreach (var uoc in user.UserOperationClaims)
                 {
-                    UserOperationClaim? userOperationClaim = await _unitOfWorkBase.UserOperationClaimRepository.GetAsync(u => u.ID == uoc.ID, u => u.OperationClaim);
+                    UserOperationClaim? userOperationClaim = _userOperationClaimRepository.Get(u => u.ID == uoc.ID, u => u.OperationClaim);
                     if (userOperationClaim != null && userOperationClaim.OperationClaim != null)
                     {
                         OperationClaim operationClaim = userOperationClaim.OperationClaim;

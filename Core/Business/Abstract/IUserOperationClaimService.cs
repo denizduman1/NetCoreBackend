@@ -6,10 +6,10 @@ namespace Core.Business.Abstract
 {
     public interface IUserOperationClaimService
     {
-        Task<IDataResult<UserOperationClaimListDto>> GetAllAsync();
-        Task<IDataResult<UserOperationClaimDto>> GetByIdAsync(int id);
-        Task<IResult> AddAsync(UserOperationClaimAddDto userOperationClaimAddDto);
-        Task<IResult> UpdateAsync(UserOperationClaimUpdateDto userOperationClaimUpdateDto);
-        Task<IResult> DeleteAsync(int id);
+        IDataResult<UserOperationClaimListDto> GetAll();
+        IDataResult<UserOperationClaimDto> GetById(int id);
+        IResult Add(UserOperationClaimAddDto userOperationClaimAddDto);
+        IResult Update(UserOperationClaimUpdateDto userOperationClaimUpdateDto);
+        IResult Delete(int id);
     }
 }

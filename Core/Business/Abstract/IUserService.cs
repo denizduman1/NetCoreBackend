@@ -6,8 +6,8 @@ namespace Core.Business.Abstract
 {
     public interface IUserService
     {
-        public Task<IDataResult<OperationClaimListDto>> GetClaimsByUserIdAsync(int userId);
-        public Task<IResult> AddAsync(User user);
-        public Task<IDataResult<User>> GetByMailAsync(string mail);
+        public IDataResult<OperationClaimListDto> GetClaimsByUserId(int userId);
+        public IResult Add(User user);
+        public IDataResult<User> GetByMail(string mail);
     }
 }

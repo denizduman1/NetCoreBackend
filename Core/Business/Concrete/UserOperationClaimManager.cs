@@ -18,42 +18,42 @@ namespace Core.Business.Concrete
 {
     public class UserOperationClaimManager : IUserOperationClaimService
     {
-        private readonly IUnitOfWorkBase _unitOfWorkBase;
+        private readonly IUserOperationClaimRepository _userOperationClaimRepository;
+        private readonly IOperationClaimRepository _operationClaimRepository;
         private readonly IMapper _mapper;
         private Messages messages = Messages.Instance();
 
-        public UserOperationClaimManager(IUnitOfWorkBase unitOfWorkBase, IMapper mapper)
+        public UserOperationClaimManager(IUserOperationClaimRepository userOperationClaimRepository, IMapper mapper, IOperationClaimRepository operationClaimRepository)
         {
-            _unitOfWorkBase = unitOfWorkBase;
+            _userOperationClaimRepository = userOperationClaimRepository;
             _mapper = mapper;
+            _operationClaimRepository = operationClaimRepository;
         }
 
-        public async Task<IResult> AddAsync(UserOperationClaimAddDto userOperationClaimAddDto)
+        public IResult Add(UserOperationClaimAddDto userOperationClaimAddDto)
         {
             var userOperationClaim = _mapper.Map<UserOperationClaim>(userOperationClaimAddDto);
-            await _unitOfWorkBase.UserOperationClaimRepository.AddAsync(userOperationClaim);
-            await _unitOfWorkBase.SaveAsync();
+            _userOperationClaimRepository.Add(userOperationClaim);
             return new Result(ResultStatus.Success, messages.SuccessAddData);
         }
 
-        public async Task<IResult> DeleteAsync(int id)
+        public IResult Delete(int id)
         {
-            var userOperationClaim = await _unitOfWorkBase.UserOperationClaimRepository.GetAsync(o => o.ID == id);
+            var userOperationClaim = _userOperationClaimRepository.Get(o => o.ID == id);
             if (userOperationClaim != null)
             {
-                await _unitOfWorkBase.UserOperationClaimRepository.RemoveAsync(userOperationClaim);
-                await _unitOfWorkBase.SaveAsync();
+                _userOperationClaimRepository.Remove(userOperationClaim);
                 return new Result(ResultStatus.Success, messages.SuccessRemoveData);
             }
             return new Result(ResultStatus.Error, messages.SuccessRemoveData);
         }
 
-        public async Task<IDataResult<UserOperationClaimListDto>> GetAllAsync()
+        public IDataResult<UserOperationClaimListDto> GetAll()
         {
-            var userOperationClaimList = await _unitOfWorkBase.UserOperationClaimRepository.GetAllAsync(null, u => u.User, u => u.OperationClaim);
+            var userOperationClaimList = _userOperationClaimRepository.GetAll(null, u => u.User, u => u.OperationClaim);
 
             if (userOperationClaimList.Count > 0)
-            {
+            {   
                 var userOperationClaimDtos = new List<UserOperationClaimDto>();
 
                 foreach (var opc in userOperationClaimList)
@@ -70,9 +70,9 @@ namespace Core.Business.Concrete
             return new DataResult<UserOperationClaimListDto>(new UserOperationClaimListDto { }, ResultStatus.Error, messages.ErrorData);
         }
 
-        public async Task<IDataResult<UserOperationClaimDto>> GetByIdAsync(int id)
+        public IDataResult<UserOperationClaimDto> GetById(int id)
         {
-            var userOperationClaim = await _unitOfWorkBase.UserOperationClaimRepository.GetAsync(o => o.ID == id);
+            var userOperationClaim = _userOperationClaimRepository.Get(o => o.ID == id);
             if (userOperationClaim != null)
             {
                 var userOperationClaimDto = _mapper.Map<UserOperationClaimDto>(userOperationClaim);
@@ -81,14 +81,13 @@ namespace Core.Business.Concrete
             return new DataResult<UserOperationClaimDto>(new UserOperationClaimDto { }, ResultStatus.Error, messages.ErrorData);
         }
 
-        public async Task<IResult> UpdateAsync(UserOperationClaimUpdateDto userOperationClaimUpdateDto)
+        public IResult Update(UserOperationClaimUpdateDto userOperationClaimUpdateDto)
         {
-            var oldUserOperationClaim = await _unitOfWorkBase.UserOperationClaimRepository.GetAsync(o => o.ID == userOperationClaimUpdateDto.ID);
+            var oldUserOperationClaim = _userOperationClaimRepository.Get(o => o.ID == userOperationClaimUpdateDto.ID);
             if (oldUserOperationClaim != null)
             {
                 var operationClaim = _mapper.Map<OperationClaim>(userOperationClaimUpdateDto);
-                await _unitOfWorkBase.OperationClaimRepository.UpdateAsync(operationClaim);
-                await _unitOfWorkBase.SaveAsync();
+               _operationClaimRepository.Update(operationClaim);
                 return new Result(ResultStatus.Success, messages.SuccessUpdateData);
             }
             return new Result(ResultStatus.Error, messages.ErrorUpdateData);

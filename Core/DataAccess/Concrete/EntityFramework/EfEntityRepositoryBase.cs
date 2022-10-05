@@ -15,30 +15,31 @@ namespace Core.DataAccess.Concrete.EntityFramework
             _context = context;
         }
 
-        public async Task AddAsync(T entity)
+        public void Add(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
+            _context.Set<T>().Add(entity);
+            _context.SaveChanges();
         }
 
-        public async Task<bool> AnyAsync(Expression<Func<T, bool>>? predicate = null)
-        {
-            if (predicate != null)
-            {
-                return await _context.Set<T>().AnyAsync(predicate);
-            }
-            return await _context.Set<T>().AnyAsync();
-        }
-
-        public async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
+        public bool Any(Expression<Func<T, bool>>? predicate = null)
         {
             if (predicate != null)
             {
-                return await _context.Set<T>().CountAsync(predicate);
+                return _context.Set<T>().Any(predicate);
             }
-            return await _context.Set<T>().CountAsync();
+            return _context.Set<T>().Any();
         }
 
-        public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null, params Expression<Func<T, object>>[] includes)
+        public int Count(Expression<Func<T, bool>>? predicate = null)
+        {
+            if (predicate != null)
+            {
+                return _context.Set<T>().Count(predicate);
+            }
+            return _context.Set<T>().Count();
+        }
+
+        public IList<T> GetAll(Expression<Func<T, bool>>? predicate = null, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _context.Set<T>();
             if (predicate != null)
@@ -52,10 +53,10 @@ namespace Core.DataAccess.Concrete.EntityFramework
                     query = query.Include(inc);
                 }
             }
-            return await query.ToListAsync();
+            return query.ToList();
         }
 
-        public async Task<T?> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        public T? Get(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _context.Set<T>();
             if (predicate != null)
@@ -69,17 +70,19 @@ namespace Core.DataAccess.Concrete.EntityFramework
                     query = query.Include(inc);
                 }
             }
-            return await query.SingleOrDefaultAsync() ?? null; 
+            return query.SingleOrDefault() ?? null;
         }
 
-        public async Task RemoveAsync(T entity)
+        public void Remove(T entity)
         {
-            await Task.Run(() => _context.Set<T>().Remove(entity));
+            _context.Set<T>().Remove(entity);
+            _context.SaveChanges();
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
-            await Task.Run(() => _context.Set<T>().Update(entity));
+            _context.Set<T>().Update(entity);
+            _context.SaveChanges();
         }
     }
 }

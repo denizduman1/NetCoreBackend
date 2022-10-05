@@ -31,16 +31,16 @@ namespace Core.Business.Concrete
             _tokenHelper = tokenHelper;
         }
 
-        public async Task<IDataResult<AccessToken>> CreateAccessToken(User user)
+        public IDataResult<AccessToken> CreateAccessToken(User user)
         {
-            var userClaims = await _userService.GetClaimsByUserIdAsync(user.ID);
+            var userClaims = _userService.GetClaimsByUserId(user.ID);
             var accessToken = _tokenHelper.CreateToken(user, userClaims.Data);
             return new DataResult<AccessToken>(accessToken, ResultStatus.Success, messages.AccessTokenCreated);
         }
 
-        public async Task<IDataResult<User>> LoginUser(UserLoginDto userLoginDto)
+        public IDataResult<User> LoginUser(UserLoginDto userLoginDto)
         {
-            var userToCheck = await _userService.GetByMailAsync(userLoginDto.Email);
+            var userToCheck = _userService.GetByMail(userLoginDto.Email);
             if (userToCheck.ResultStatus == ResultStatus.Error)
                 return new DataResult<User>(new User { }, ResultStatus.Error, userToCheck.Message);
 
@@ -50,7 +50,7 @@ namespace Core.Business.Concrete
             return new DataResult<User>(userToCheck.Data, ResultStatus.Success, messages.SuccessLogin);
         }
 
-        public async Task<IDataResult<User>> RegisterUser(UserAddDto userAddDto)
+        public IDataResult<User> RegisterUser(UserAddDto userAddDto)
         {
             HashingHelper.CreatePasswordHash(userAddDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -58,13 +58,13 @@ namespace Core.Business.Concrete
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            await _userService.AddAsync(user);
+            _userService.Add(user);
             return new DataResult<User>(user, ResultStatus.Success, messages.SuccessRegister);
         }
 
-        public async Task<IResult> UserExist(string email)
+        public IResult UserExist(string email)
         {
-            var userToCheck = await _userService.GetByMailAsync(email);
+            var userToCheck = _userService.GetByMail(email);
             if (userToCheck.ResultStatus == ResultStatus.Success)
                 return new Result(ResultStatus.Error, messages.ErrorEmailExistUser);
 

@@ -12,9 +12,9 @@ namespace Core.Business.Abstract
 {
     public interface IAuthService
     {
-        public Task<IDataResult<User>> RegisterUser(UserAddDto userAddDto); 
-        public Task<IDataResult<User>> LoginUser(UserLoginDto userLoginDto);
-        public Task<IResult> UserExist(string email);
-        public Task<IDataResult<AccessToken>> CreateAccessToken(User user);
+        public IDataResult<User> RegisterUser(UserAddDto userAddDto);
+        public IDataResult<User> LoginUser(UserLoginDto userLoginDto);
+        public IResult UserExist(string email);
+        public IDataResult<AccessToken> CreateAccessToken(User user);
     }
 }

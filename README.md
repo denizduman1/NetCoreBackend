@@ -8,6 +8,9 @@
 🚀 Aspect  <br>
 🚀 Validation Aspect  <br>
 🚀 JWT   <br>
+🚀 Caching  <br>
+🚀 Performance Control  <br>
+🚀 Transaction Management  <br>
 🚀 EntityFramework   <br>
 🚀 BusinessEngine  <br>
 🚀 Result Yapılandırılması  <br>

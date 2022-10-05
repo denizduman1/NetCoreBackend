@@ -22,6 +22,7 @@
 ✅ Microsoft.AspNetCore.Http.Abstractions <br>
 ✅ Microsoft.EntityFrameworkCore <br>
 ✅ Microsoft.EntityFrameworkCore.Relational <br>
+✅ Microsoft.Extensions.Caching.Memory <br>
 ✅ Microsoft.Extensions.Configuration <br>
 ✅ Microsoft.Extensions.Configuration.Binder <br>
 ✅ Microsoft.IdentityModel.Tokens <br>

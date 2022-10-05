@@ -33,6 +33,11 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
             return _memoryCache.Get<T>(key);
         }
 
+        public object Get(string key)
+        {
+            return _memoryCache.Get(key);
+        }
+
         public bool IsAdd(string key)
         {
             return _memoryCache != null ? _memoryCache.TryGetValue(key, out _) : false; //out dönmemesi için out _
@@ -66,18 +71,16 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
 
                 var regex = new Regex(pattern, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-                if (cacheCollectionValues != null)
+                if (cacheCollectionValues != null && _memoryCache != null)
                 {
                     keysToRemove = cacheCollectionValues.Where(d => regex.IsMatch(d.Key.ToString())).Select(d => d.Key).ToList();
-                }
 
-                foreach (var key in keysToRemove)
-                {
-                    _memoryCache.Remove(key);
+                    foreach (var key in keysToRemove)
+                    {
+                        _memoryCache.Remove(key);
+                    }
                 }
             }
-
-
         }
     }
 }

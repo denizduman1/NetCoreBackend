@@ -11,9 +11,11 @@
 🚀 Caching  <br>
 🚀 Performance Control  <br>
 🚀 Transaction Management  <br>
-🚀 EntityFramework   <br>
+🚀 EntityFramework with MSSQL  <br>
 🚀 BusinessEngine  <br>
 🚀 Result Yapılandırılması  <br>
+🚀 MongoDb  <br>
+
 
 <h3>Kullandığım Kütüphaneler</h3>
 ✅ Autofac.Extras.DynamicProxy <br>
@@ -27,3 +29,5 @@
 ✅ Microsoft.Extensions.Configuration.Binder <br>
 ✅ Microsoft.IdentityModel.Tokens <br>
 ✅ Microsoft.IdentityModel.Tokens.Jwt <br>
+✅ MongoDb.Driver <br>
+
